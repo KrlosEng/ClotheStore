@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TuModa Luxe | Alta Moda & Autenticación</title>
+  <meta name="description" content="TuModa Luxe - Boutique de moda urbana y alta costura con base de datos SQLite y sistema de usuarios.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- BARRA DE ANUNCIOS -->
+  <div class="top-announcement">
+    COLECCIÓN 2026 <span>|</span> ENVÍOS VIP EN COMPRAS SUPERIORES A $100 <span>|</span> BASE DE DATOS SQLITE ACTIVA
+  </div>
+
+  <!-- HEADER & NAVEGACIÓN -->
+  <header class="site-header" id="header">
+    <div class="nav-container">
+      <a href="#" class="brand-logo" id="brand-logo">
+        <h1>TuModa<span class="logo-dot">.</span></h1>
+        <span class="sub-tag">LUXE</span>
+      </a>
+
+      <!-- Buscador -->
+      <div class="nav-search">
+        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="search-input" placeholder="Buscar por estilo, tela o prendas (ej. Oversize, Oxford, Denim)...">
+      </div>
+
+      <!-- Acciones principales -->
+      <div class="nav-actions">
+        <!-- BOTÓN DE INICIO DE SESIÓN / MI CUENTA -->
+        <button class="icon-btn" id="btn-auth-modal" title="Iniciar Sesión / Registro">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </button>
+
+        <!-- Indicador de Usuario Autenticado -->
+        <div class="user-profile-badge" id="user-badge" style="display: none;">
+          <span id="user-name-display">Hola, Carlos</span>
+          <button id="btn-logout" class="btn-logout-small" title="Cerrar Sesión">Salir</button>
+        </div>
+
+        <button class="icon-btn" id="btn-wishlist-toggle" title="Ver Favoritos">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+          <span class="badge-count" id="wishlist-badge">0</span>
+        </button>
+
+        <button class="icon-btn" id="btn-cart-toggle" title="Ver Carrito de Compras">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span class="badge-count" id="cart-badge">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO BANNER -->
+    <section class="hero-banner" id="hero">
+      <div class="hero-content">
+        <span class="hero-tag">SISTEMA INTEGRADO DE BASE DE DATOS</span>
+        <h2 class="hero-title">MODA URBANA DE <span>ALTA GAMA</span></h2>
+        <p class="hero-subtitle">Gestión completa de usuarios, inventario por variantes, carritos y seguimiento de envíos en tiempo real.</p>
+        <button class="btn-hero-cta" onclick="document.getElementById('catalog').scrollIntoView({behavior: 'smooth'})">EXPLORAR CATÁLOGO</button>
+      </div>
+      <div class="hero-image-box"></div>
+    </section>
+
+    <!-- CATÁLOGO & FILTROS -->
+    <section class="catalog-section" id="catalog">
+      <div class="filter-bar">
+        <div class="category-pills" id="category-pills">
+          <button class="pill-btn active" data-category="todos" id="filter-all">
+            TODOS <span class="count-tag" id="count-all">(39)</span>
+          </button>
+          <button class="pill-btn" data-category="camisetas" id="filter-camisetas">
+            CAMISETAS OVERSIZE <span class="count-tag">(3)</span>
+          </button>
+          <button class="pill-btn" data-category="camisas" id="filter-camisas">
+            CAMISAS <span class="count-tag">(10)</span>
+          </button>
+          <button class="pill-btn" data-category="pantalones" id="filter-pantalones">
+            PANTALONES <span class="count-tag">(10)</span>
+          </button>
+          <button class="pill-btn" data-category="jeans" id="filter-jeans">
+            JEANS <span class="count-tag">(10)</span>
+          </button>
+          <button class="pill-btn" data-category="zapatos" id="filter-zapatos">
+            ZAPATOS <span class="count-tag">(6)</span>
+          </button>
+        </div>
+
+        <div class="sort-controls">
+          <label for="sort-select">ORDENAR POR:</label>
+          <select id="sort-select" class="custom-select">
+            <option value="featured">Destacados</option>
+            <option value="price-asc">Precio: Menor a Mayor</option>
+            <option value="price-desc">Precio: Mayor a Menor</option>
+            <option value="rating">Mejor Valorados</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="products-grid" id="products-grid">
+        <!-- Render dinámico desde app.js y API backend -->
+      </div>
+    </section>
+  </main>
+
+  <!-- MODAL DE AUTENTICACIÓN (LOGIN / REGISTRO) -->
+  <div class="modal-container" id="auth-modal">
+    <div class="modal-content" style="max-width: 440px; padding: 2.5rem; background: var(--bg-surface);">
+      <button class="close-btn" id="btn-close-auth" style="position: absolute; top: 1rem; right: 1rem;">&times;</button>
+      
+      <!-- TABS LOGIN / REGISTRO -->
+      <div class="auth-tabs">
+        <button class="auth-tab-btn active" id="tab-login-btn">INICIAR SESIÓN</button>
+        <button class="auth-tab-btn" id="tab-register-btn">CREAR CUENTA</button>
+      </div>
+
+      <!-- FORMULARIO DE LOGIN -->
+      <form id="login-form" class="auth-form active">
+        <h4 style="font-family: var(--font-display); color: var(--accent-gold); margin-bottom: 1rem;">Bienvenido a TuModa Luxe</h4>
+        <div class="form-group">
+          <label>Correo Electrónico</label>
+          <input type="email" id="login-email" required placeholder="tu@correo.com">
+        </div>
+        <div class="form-group">
+          <label>Contraseña</label>
+          <input type="password" id="login-password" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="btn-primary-block">INGRESAR A MI CUENTA</button>
+        <p style="font-size: 0.75rem; color: var(--text-subtle); margin-top: 1rem; text-align: center;">
+          Demo Admin: <b>admin@tumoda.com</b> / <b>admin123</b><br>
+          Demo Cliente: <b>cliente@tumoda.com</b> / <b>cliente123</b>
+        </p>
+      </form>
+
+      <!-- FORMULARIO DE REGISTRO -->
+      <form id="register-form" class="auth-form">
+        <h4 style="font-family: var(--font-display); color: var(--accent-gold); margin-bottom: 1rem;">Únete a TuModa Luxe</h4>
+        <div class="form-group">
+          <label>Nombre Completo</label>
+          <input type="text" id="reg-name" required placeholder="Carlos Mendoza">
+        </div>
+        <div class="form-group">
+          <label>Correo Electrónico</label>
+          <input type="email" id="reg-email" required placeholder="carlos@example.com">
+        </div>
+        <div class="form-group">
+          <label>Teléfono</label>
+          <input type="tel" id="reg-phone" placeholder="+57 300 000 0000">
+        </div>
+        <div class="form-group">
+          <label>Contraseña</label>
+          <input type="password" id="reg-password" required placeholder="Mínimo 6 caracteres">
+        </div>
+        <button type="submit" class="btn-primary-block">REGISTRAR CUENTA</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- DRAWER DEL CARRITO -->
+  <div class="drawer-overlay" id="drawer-overlay"></div>
+  <aside class="cart-drawer" id="cart-drawer">
+    <div class="drawer-header">
+      <h3>BOLSA DE COMPRAS</h3>
+      <button class="close-btn" id="btn-close-cart">&times;</button>
+    </div>
+
+    <div class="drawer-body" id="cart-items-container">
+      <!-- Items -->
+    </div>
+
+    <div class="drawer-footer">
+      <div class="summary-row">
+        <span>Subtotal:</span>
+        <span id="cart-subtotal">$0.00</span>
+      </div>
+      <div class="summary-row">
+        <span>Envío VIP:</span>
+        <span id="cart-shipping">$0.00</span>
+      </div>
+      <div class="summary-row total">
+        <span>TOTAL:</span>
+        <span id="cart-total">$0.00</span>
+      </div>
+      <button class="btn-primary-block" id="btn-proceed-checkout">FINALIZAR COMPRA</button>
+    </div>
+  </aside>
+
+  <!-- MODAL DE PRODUCTO -->
+  <div class="modal-container" id="product-modal">
+    <div class="modal-content" id="modal-product-content">
+      <!-- Contenido dinámico -->
+    </div>
+  </div>
+
+  <!-- MODAL DE CHECKOUT -->
+  <div class="modal-container" id="checkout-modal">
+    <div class="modal-content" style="max-width: 500px; padding: 2.5rem; background: var(--bg-surface);">
+      <button class="close-btn" id="btn-close-checkout" style="position: absolute; top: 1rem; right: 1rem;">&times;</button>
+      <h3 style="font-family: var(--font-display); font-size: 1.6rem; text-transform: uppercase; margin-bottom: 1rem; color: var(--accent-gold);">Pago Seguro TuModa Luxe</h3>
+      <form id="checkout-form" style="display: flex; flex-direction: column; gap: 1.2rem;">
+        <div>
+          <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-subtle); display: block; margin-bottom: 0.4rem;">Nombre Completo</label>
+          <input type="text" id="chk-name" required placeholder="Carlos Mendoza" style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.04); border: 1px solid var(--border-glass); border-radius: 8px; color: #fff;">
+        </div>
+        <div>
+          <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-subtle); display: block; margin-bottom: 0.4rem;">Correo Electrónico</label>
+          <input type="email" id="chk-email" required placeholder="carlos@example.com" style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.04); border: 1px solid var(--border-glass); border-radius: 8px; color: #fff;">
+        </div>
+        <div>
+          <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-subtle); display: block; margin-bottom: 0.4rem;">Dirección de Envío</label>
+          <input type="text" id="chk-address" required placeholder="Av. Luxe #101, Apto 402" style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.04); border: 1px solid var(--border-glass); border-radius: 8px; color: #fff;">
+        </div>
+        <div>
+          <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-subtle); display: block; margin-bottom: 0.4rem;">Método de Pago (Simulado)</label>
+          <select id="chk-payment" style="width: 100%; padding: 0.8rem; background: var(--bg-card); border: 1px solid var(--border-glass); border-radius: 8px; color: #fff;">
+            <option value="Tarjeta de Crédito / Débito">Tarjeta de Crédito VIP / Débito</option>
+            <option value="PayPal Express">PayPal Express</option>
+            <option value="Apple Pay / Google Pay">Apple Pay / Google Pay</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-primary-block">CONFIRMAR Y GUARDAR EN DB</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOASTS -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-col">
+        <h4 style="font-size: 1.6rem; color: #ffffff;">TuModa<span style="color: var(--accent-crimson);">.</span> LUXE</h4>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;">Boutique de alta gama con respaldo de Base de Datos SQLite y autenticación JWT.</p>
+      </div>
+      <div class="footer-col">
+        <h4>COLECCIONES</h4>
+        <ul>
+          <li>4 Camisetas Oversize Heavy Cotton</li>
+          <li>10 Camisas Oxford y Satén</li>
+          <li>10 Pantalones Chinos y Sartoriales</li>
+          <li>10 Jeans Icónicos y Selvedge</li>
+          <li>6 Pares de Calzado Exclusivo</li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>GARANTÍAS VIP</h4>
+        <ul>
+          <li>Base de Datos Relacional SQLite Activa</li>
+          <li>Autenticación Segura Bcrypt & JWT</li>
+          <li>Registro de Transacciones & Guías de Envío</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 TuModa Luxe. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="products.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
