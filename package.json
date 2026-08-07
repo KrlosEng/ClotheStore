@@ -2,10 +2,10 @@
   "name": "tumoda-luxe-backend",
   "version": "1.0.0",
   "description": "API Backend para TuModa Luxe con Base de Datos SQLite y Autenticación",
-  "main": "server.js",
+  "main": "backend/server.js",
   "scripts": {
-    "start": "node server.js",
-    "seed": "node database/seed.js"
+    "start": "node backend/server.js",
+    "seed": "node backend/database/seed.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

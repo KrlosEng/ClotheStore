@@ -13,7 +13,7 @@ const JWT_SECRET = 'tumoda_luxe_secret_key_2026';
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Middleware de Autenticación JWT
 function authenticateToken(req, res, next) {
